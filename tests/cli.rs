@@ -55,7 +55,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.1.0"));
+        .stdout(predicate::str::contains("dicho 0.1.1"));
 }
 
 #[test]

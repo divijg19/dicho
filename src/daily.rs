@@ -26,7 +26,7 @@ pub fn random(entries: &[Entry]) -> &Entry {
     &entries[(state as usize) % entries.len()]
 }
 
-/// Format the current local date as YYYY-MM-DD.
+/// Format the current UTC date as YYYY-MM-DD.
 pub fn today() -> Result<String> {
     let seconds = SystemTime::now()
         .duration_since(UNIX_EPOCH)

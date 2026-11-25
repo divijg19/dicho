@@ -1,4 +1,6 @@
-use anyhow::{Context, Result};
+use std::collections::HashSet;
+
+use anyhow::{Context, Result, anyhow, bail};
 use serde::Deserialize;
 
 const RAW_ENTRIES: &str = include_str!("../data/curated/entries.jsonl");
@@ -54,38 +56,86 @@ pub struct Entry {
 /// Sorting here keeps daily selection stable even if the source lines are
 /// reordered.
 pub fn load() -> Result<Vec<Entry>> {
-    let mut entries = Vec::new();
+    parse(RAW_ENTRIES)
+}
 
-    for (index, line) in RAW_ENTRIES.lines().enumerate() {
+fn parse(raw: &str) -> Result<Vec<Entry>> {
+    let mut entries = Vec::new();
+    let mut seen = HashSet::new();
+
+    for (index, line) in raw.lines().enumerate() {
+        let line_number = index + 1;
         let line = line.trim();
         if line.is_empty() {
             continue;
         }
+
         let entry: Entry = serde_json::from_str(line)
-            .with_context(|| format!("invalid curated entry on line {}", index + 1))?;
+            .with_context(|| format!("invalid curated entry on line {line_number}"))?;
+        validate(&entry, line_number)?;
+
+        if !seen.insert(entry.id.clone()) {
+            bail!("duplicate entry id '{}' on line {line_number}", entry.id);
+        }
         entries.push(entry);
+    }
+
+    if entries.is_empty() {
+        bail!("curated collection is empty");
     }
 
     entries.sort_by(|left, right| left.id.cmp(&right.id));
     Ok(entries)
 }
 
+fn validate(entry: &Entry, line_number: usize) -> Result<()> {
+    let required = |field: &str| anyhow!("line {line_number}: {field} must not be empty");
+
+    if entry.id.trim().is_empty() {
+        return Err(required("id"));
+    }
+    if entry.es.trim().is_empty() {
+        return Err(required("es"));
+    }
+    if entry.en.trim().is_empty() {
+        return Err(required("en"));
+    }
+    if entry.source.trim().is_empty() {
+        return Err(required("source"));
+    }
+    if entry.license.trim().is_empty() {
+        return Err(required("license"));
+    }
+    if entry.vocabulary.is_empty() {
+        bail!("line {line_number}: vocabulary must not be empty");
+    }
+    for item in &entry.vocabulary {
+        if item.term.trim().is_empty() {
+            return Err(required("vocabulary term"));
+        }
+        if item.meaning.trim().is_empty() {
+            return Err(required("vocabulary meaning"));
+        }
+    }
+    for tag in &entry.tags {
+        if tag.trim().is_empty() {
+            return Err(required("tag"));
+        }
+    }
+
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    const SAMPLE: &str = r#"{"id":"test-001","es":"Hola.","en":"Hello.","category":"proverb","source":"Test","license":"Public domain","translation_status":"draft","vocabulary":[{"term":"hola","meaning":"hello"}]}"#;
 
     #[test]
     fn collection_is_well_formed() {
         let entries = load().expect("embedded collection should parse");
         assert_eq!(entries.len(), 20);
-
-        for entry in &entries {
-            assert!(!entry.id.is_empty());
-            assert!(!entry.es.is_empty());
-            assert!(!entry.en.is_empty());
-            assert!(!entry.source.is_empty());
-            assert!(!entry.license.is_empty());
-        }
     }
 
     #[test]
@@ -101,5 +151,32 @@ mod tests {
     fn every_entry_has_featured_vocabulary() {
         let entries = load().expect("embedded collection should parse");
         assert!(entries.iter().all(|entry| !entry.vocabulary.is_empty()));
+    }
+
+    #[test]
+    fn parse_rejects_an_empty_collection() {
+        let error = parse("").expect_err("empty input should fail");
+        assert!(error.to_string().contains("empty"));
+    }
+
+    #[test]
+    fn parse_rejects_duplicate_ids() {
+        let raw = format!("{SAMPLE}\n{SAMPLE}");
+        let error = parse(&raw).expect_err("duplicate ids should fail");
+        assert!(error.to_string().contains("duplicate"));
+    }
+
+    #[test]
+    fn parse_rejects_missing_required_fields() {
+        let raw = SAMPLE.replace("\"es\":\"Hola.\",", "");
+        let error = parse(&raw).expect_err("missing field should fail");
+        assert!(error.to_string().contains("line 1"));
+    }
+
+    #[test]
+    fn parse_rejects_blank_required_fields() {
+        let raw = SAMPLE.replace("\"es\":\"Hola.\"", "\"es\":\"\"");
+        let error = parse(&raw).expect_err("blank field should fail");
+        assert!(error.to_string().contains("es must not be empty"));
     }
 }
