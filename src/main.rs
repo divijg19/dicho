@@ -15,7 +15,7 @@ fn main() -> Result<()> {
 fn print_foundation_message() {
     println!("dicho: A Spanish language companion for your terminal");
     println!();
-    println!("Foundation build (v0.0.1). Daily Spanish content arrives in v0.1.");
+    println!("Foundation build (v0.0.2). Daily Spanish content arrives in v0.1.");
 }
 
 #[cfg(test)]

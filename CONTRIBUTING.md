@@ -15,7 +15,7 @@ Development happens on version side branches off `main`, named by minor version:
 ```sh
 cargo fmt --all -- --check
 cargo test
-PYTHONPATH=python/src python3 -m unittest discover -s python/tests
+uv run --project python python -m unittest discover -s python/tests
 ```
 
 ## Rules that should not be relaxed

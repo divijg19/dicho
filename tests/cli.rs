@@ -8,7 +8,7 @@ fn root_command_prints_foundation_message() {
         .assert()
         .success()
         .stdout(predicate::str::contains("dicho"))
-        .stdout(predicate::str::contains("v0.0.1"));
+        .stdout(predicate::str::contains("v0.0.2"));
 }
 
 #[test]
@@ -18,7 +18,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.0.1"));
+        .stdout(predicate::str::contains("dicho 0.0.2"));
 }
 
 #[test]
