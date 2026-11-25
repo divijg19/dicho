@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.0.1 (foundation). The CLI builds and runs, but only prints a placeholder. Daily Spanish content arrives in v0.1.
+> Status: v0.0.2 (foundation). The CLI builds and runs, but only prints a placeholder. Daily Spanish content arrives in v0.1.
 
 ## Principles
 
@@ -20,7 +20,7 @@ A Spanish language companion for your terminal.
 ```sh
 cargo run                                                            # foundation placeholder
 cargo test                                                           # Rust tests
-PYTHONPATH=python/src python3 -m unittest discover -s python/tests   # Python skeleton test
+uv run --project python python -m unittest discover -s python/tests  # Python skeleton test
 ```
 
 ## Repository layout
