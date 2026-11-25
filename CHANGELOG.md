@@ -22,4 +22,11 @@
 - Embed an initial collection of 20 traditional refranes and sayings.
 - Mark all initial translations as drafts pending human review.
 
+## v0.1.1: Collection validation
+
+- Validate embedded entries when loading, with line numbers in error messages.
+- Reject empty collections, duplicate identifiers, blank fields, and empty vocabulary.
+- Correct the daily date documentation to state UTC.
+- Add negative tests for malformed collections.
+
 Version milestones are tracked here until tagging begins at v0.3.x.
