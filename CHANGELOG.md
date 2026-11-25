@@ -14,4 +14,12 @@
 - Commit the uv lockfile and ignore setuptools build artifacts.
 - Document the uv setup and test workflow.
 
+## v0.1.0: Daily Spanish foundation
+
+- Show a daily Spanish entry with translation, category, source, and featured vocabulary.
+- Add `random` and `repeat` commands alongside the default daily command.
+- Select daily content by a stable date hash over identifier sorted entries.
+- Embed an initial collection of 20 traditional refranes and sayings.
+- Mark all initial translations as drafts pending human review.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

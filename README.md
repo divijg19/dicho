@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.0.2 (foundation). The CLI builds and runs, but only prints a placeholder. Daily Spanish content arrives in v0.1.
+> Status: v0.1.0. The CLI shows a daily Spanish entry from an embedded curated collection. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -18,10 +18,14 @@ A Spanish language companion for your terminal.
 ## Quick start
 
 ```sh
-cargo run                                                            # foundation placeholder
+cargo run                                                            # today's entry
+cargo run -- random                                                  # a random entry
+cargo run -- repeat                                                  # today's entry again
 cargo test                                                           # Rust tests
 uv run --project python python -m unittest discover -s python/tests  # Python skeleton test
 ```
+
+The default command shows one Spanish entry, its English translation, its category, its source, and a featured vocabulary item. Daily selection is deterministic for a given date and dataset.
 
 ## Repository layout
 
@@ -30,7 +34,7 @@ uv run --project python python -m unittest discover -s python/tests  # Python sk
 | `src/` | Rust CLI and application logic |
 | `data/raw/` | Immutable source material with provenance and licence records |
 | `data/imported/` | Normalised material derived from `raw/` |
-| `data/curated/` | Canonical, human-reviewed entries |
+| `data/curated/` | Canonical entries, currently draft pending review |
 | `data/processed/` | Derived linguistic features |
 | `data/artifacts/` | Generated files consumed by the Rust application |
 | `python/` | Standalone data-preparation package (`dicho-data`) |
