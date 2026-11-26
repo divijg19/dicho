@@ -15,24 +15,28 @@ pub struct Store {
 }
 
 impl Store {
-    /// Resolve the data path from a project override, XDG, or the home directory.
-    pub fn default_path() -> Result<PathBuf> {
+    /// Resolve the data directory from a project override, XDG, or the home directory.
+    pub fn data_dir() -> Result<PathBuf> {
         if let Some(dir) = std::env::var_os("DICHO_DATA_DIR") {
             if !dir.is_empty() {
-                return Ok(PathBuf::from(dir).join("saved.json"));
+                return Ok(PathBuf::from(dir));
             }
         }
         if let Some(dir) = std::env::var_os("XDG_DATA_HOME") {
             if !dir.is_empty() {
-                return Ok(PathBuf::from(dir).join("dicho").join("saved.json"));
+                return Ok(PathBuf::from(dir).join("dicho"));
             }
         }
         let home = std::env::var_os("HOME").context("HOME is not set")?;
         Ok(PathBuf::from(home)
             .join(".local")
             .join("share")
-            .join("dicho")
-            .join("saved.json"))
+            .join("dicho"))
+    }
+
+    /// Resolve the path of the saved entries file.
+    pub fn default_path() -> Result<PathBuf> {
+        Ok(Self::data_dir()?.join("saved.json"))
     }
 
     pub fn new(path: PathBuf) -> Self {

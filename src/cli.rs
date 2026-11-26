@@ -65,6 +65,12 @@ pub enum Command {
     },
     /// List saved entries
     Saved,
+    /// Show recent learning events
+    History {
+        /// Maximum number of events to show
+        #[arg(long, default_value_t = 10)]
+        limit: usize,
+    },
 }
 
 #[cfg(test)]
@@ -87,6 +93,7 @@ mod tests {
             "categories",
             "tags",
             "saved",
+            "history",
         ] {
             let cli = Cli::try_parse_from(["dicho", name])
                 .unwrap_or_else(|_| panic!("{name} should parse"));

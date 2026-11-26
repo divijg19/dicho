@@ -4,6 +4,7 @@ mod content;
 mod daily;
 mod display;
 mod filter;
+mod history;
 mod search;
 mod storage;
 
@@ -18,12 +19,16 @@ fn main() -> Result<()> {
 
     match command {
         Command::Daily => {
-            let entry = daily::daily(&entries, &daily::today()?);
+            let date = daily::today()?;
+            let entry = daily::daily(&entries, &date);
             display::print_entry(entry, "Daily Spanish");
+            history::record_daily_if_new(&date, &entry.id)?;
         }
         Command::Repeat => {
-            let entry = daily::daily(&entries, &daily::today()?);
+            let date = daily::today()?;
+            let entry = daily::daily(&entries, &date);
             display::print_entry(entry, "Daily Spanish");
+            history::record_daily_if_new(&date, &entry.id)?;
         }
         Command::Random => {
             let entry = daily::random(&entries, &daily::today()?);
@@ -75,6 +80,7 @@ fn main() -> Result<()> {
             if !ids.contains(&id) {
                 ids.push(id.clone());
                 store.save(&ids)?;
+                history::append(history::EventKind::Save, &id)?;
             }
             println!("Saved {id}");
         }
@@ -86,6 +92,7 @@ fn main() -> Result<()> {
                 .filter(|saved| saved != &id)
                 .collect();
             store.save(&ids)?;
+            history::append(history::EventKind::Unsave, &id)?;
             println!("Removed {id}");
         }
         Command::Saved => {
@@ -100,6 +107,16 @@ fn main() -> Result<()> {
                     .cloned()
                     .collect();
                 for line in browse::browse_lines(&found) {
+                    println!("{line}");
+                }
+            }
+        }
+        Command::History { limit } => {
+            let events = history::recent(limit)?;
+            if events.is_empty() {
+                println!("No history yet.");
+            } else {
+                for line in history::lines(&events) {
                     println!("{line}");
                 }
             }
