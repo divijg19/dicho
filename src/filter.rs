@@ -22,7 +22,7 @@ pub fn apply(entries: &[Entry], filters: &Filters) -> Result<Vec<Entry>> {
     }
 
     let category = match &filters.category {
-        Some(value) => match Category::parse(value) {
+        Some(value) => match Category::parse(&fold(value)) {
             Some(category) => Some(category),
             None => bail!("unknown category '{value}'"),
         },
@@ -76,6 +76,16 @@ mod tests {
         let found = apply(&entries(), &filters).expect("filter should succeed");
         assert_eq!(found.len(), 5);
         assert!(found.iter().all(|entry| entry.category == Category::Saying));
+    }
+
+    #[test]
+    fn category_filter_is_case_insensitive() {
+        let filters = Filters {
+            category: Some("SAYING".to_owned()),
+            ..Filters::default()
+        };
+        let found = apply(&entries(), &filters).expect("filter should succeed");
+        assert_eq!(found.len(), 5);
     }
 
     #[test]

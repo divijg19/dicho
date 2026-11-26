@@ -50,6 +50,9 @@ pub enum Command {
         /// Terms to search for
         #[arg(required = true)]
         query: Vec<String>,
+        /// Match inside words instead of whole words
+        #[arg(long)]
+        substring: bool,
         #[command(flatten)]
         filters: Filters,
     },
