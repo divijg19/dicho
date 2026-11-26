@@ -1,6 +1,6 @@
 [package]
 name = "dicho"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.100"
 description = "A local-first Spanish language companion for your terminal"

@@ -71,7 +71,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.1.2"));
+        .stdout(predicate::str::contains("dicho 0.2.0"));
 }
 
 #[test]
@@ -86,4 +86,45 @@ fn help_flag_describes_the_project() {
 #[test]
 fn unknown_flag_is_rejected() {
     dicho().arg("--bogus").assert().failure();
+}
+
+#[test]
+fn browse_lists_all_entries() {
+    let output = dicho().arg("browse").output().expect("command should run");
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(text.lines().count(), 40);
+    assert!(text.contains("refran-001  "));
+    assert!(text.contains("refran-040  "));
+}
+
+#[test]
+fn show_finds_a_known_entry() {
+    dicho()
+        .args(["show", "refran-021"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Entry: refran-021"))
+        .stdout(predicate::str::contains("A buen hambre no hay pan duro."))
+        .stdout(predicate::str::contains("Difficulty: 0.25"));
+}
+
+#[test]
+fn show_rejects_an_unknown_id() {
+    dicho().args(["show", "missing"]).assert().failure();
+}
+
+#[test]
+fn categories_and_tags_show_counts() {
+    dicho()
+        .arg("categories")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("proverb"))
+        .stdout(predicate::str::contains("saying"));
+    dicho()
+        .arg("tags")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("optimism  2"));
 }

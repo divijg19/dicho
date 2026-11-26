@@ -1,5 +1,14 @@
 use crate::content::Entry;
 
+pub fn print_detail(entry: &Entry) {
+    println!("Entry: {}", entry.id);
+    print_entry(entry, "Spanish entry");
+    if let Some(difficulty) = entry.difficulty {
+        println!();
+        println!("  Difficulty: {difficulty:.2}, heuristic estimate");
+    }
+}
+
 pub fn print_entry(entry: &Entry, heading: &str) {
     println!("{heading}");
     println!();
