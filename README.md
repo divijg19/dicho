@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.1.1. The CLI shows a daily Spanish entry from an embedded curated collection. Translations are drafts awaiting review.
+> Status: v0.1.2. The CLI shows a daily Spanish entry from an embedded curated collection. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -25,7 +25,16 @@ cargo test                                                           # Rust test
 uv run --project python python -m unittest discover -s python/tests  # Python skeleton test
 ```
 
-The default command shows one Spanish entry, its English translation, its category, its source, and a featured vocabulary item. Daily selection is deterministic for a given date and dataset.
+The default command shows one Spanish entry, its English translation, its category, its source, and a featured vocabulary item. Daily selection is deterministic for a given date and dataset. The date is UTC, so the entry changes at 00:00 UTC rather than local midnight.
+
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `dicho` | Show today's entry |
+| `dicho daily` | Show today's entry |
+| `dicho random` | Show a random entry, never today's entry |
+| `dicho repeat` | Show today's entry again |
 
 ## Repository layout
 

@@ -44,6 +44,22 @@ fn random_command_shows_an_entry() {
 }
 
 #[test]
+fn random_does_not_repeat_todays_entry() {
+    let daily = dicho().output().expect("command should run");
+    let random = dicho().arg("random").output().expect("command should run");
+    assert!(random.status.success());
+    assert_ne!(spanish_line(&daily.stdout), spanish_line(&random.stdout));
+}
+
+fn spanish_line(output: &[u8]) -> String {
+    String::from_utf8_lossy(output)
+        .lines()
+        .find(|line| line.starts_with("  ") && !line.contains(':'))
+        .unwrap_or_default()
+        .to_owned()
+}
+
+#[test]
 fn output_is_plain_text() {
     let output = dicho().output().expect("command should run");
     assert!(!output.stdout.contains(&0x1b));
@@ -55,7 +71,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.1.1"));
+        .stdout(predicate::str::contains("dicho 0.1.2"));
 }
 
 #[test]

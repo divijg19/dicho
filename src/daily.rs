@@ -9,12 +9,18 @@ use crate::content::Entry;
 /// The hash is fixed rather than relying on the standard library hasher so
 /// that selections stay stable across Rust versions.
 pub fn daily<'a>(entries: &'a [Entry], date: &str) -> &'a Entry {
-    let index = fnv1a(date) as usize % entries.len();
-    &entries[index]
+    &entries[daily_index(entries, date)]
+}
+
+fn daily_index(entries: &[Entry], date: &str) -> usize {
+    fnv1a(date) as usize % entries.len()
 }
 
 /// Select an entry using a time seeded xorshift generator.
-pub fn random(entries: &[Entry]) -> &Entry {
+///
+/// The entry for today is skipped so a random request does not repeat the
+/// daily encounter.
+pub fn random<'a>(entries: &'a [Entry], date: &str) -> &'a Entry {
     let nanos = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|duration| duration.as_nanos() as u64)
@@ -23,7 +29,12 @@ pub fn random(entries: &[Entry]) -> &Entry {
     state ^= state << 13;
     state ^= state >> 7;
     state ^= state << 17;
-    &entries[(state as usize) % entries.len()]
+
+    let mut index = (state as usize) % entries.len();
+    if entries.len() > 1 && index == daily_index(entries, date) {
+        index = (index + 1) % entries.len();
+    }
+    &entries[index]
 }
 
 /// Format the current UTC date as YYYY-MM-DD.
@@ -68,6 +79,7 @@ fn fnv1a(text: &str) -> u64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashSet;
 
     #[test]
     fn civil_from_days_matches_known_dates() {
@@ -87,5 +99,26 @@ mod tests {
         let first = daily(&entries, "2026-11-25");
         let second = daily(&entries, "2026-11-25");
         assert_eq!(first.id, second.id);
+    }
+
+    #[test]
+    fn sample_dates_select_multiple_entries() {
+        let entries = crate::content::load().expect("embedded collection should parse");
+        let mut selected = HashSet::new();
+        for day in 1..=28 {
+            let date = format!("2026-11-{day:02}");
+            selected.insert(daily(&entries, &date).id.clone());
+        }
+        assert!(selected.len() > 1);
+    }
+
+    #[test]
+    fn random_never_matches_todays_entry() {
+        let entries = crate::content::load().expect("embedded collection should parse");
+        let date = "2026-11-25";
+        let today = daily(&entries, date).id.clone();
+        for _ in 0..64 {
+            assert_ne!(random(&entries, date).id, today);
+        }
     }
 }

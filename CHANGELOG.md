@@ -29,4 +29,10 @@
 - Correct the daily date documentation to state UTC.
 - Add negative tests for malformed collections.
 
+## v0.1.2: Selection and documentation polish
+
+- Skip today's entry when serving a random entry.
+- Test that a range of dates maps to more than one entry.
+- Add a command reference to the README and document the UTC rollover.
+
 Version milestones are tracked here until tagging begins at v0.3.x.
