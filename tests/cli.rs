@@ -71,7 +71,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.2.0"));
+        .stdout(predicate::str::contains("dicho 0.2.1"));
 }
 
 #[test]
@@ -112,6 +112,39 @@ fn show_finds_a_known_entry() {
 #[test]
 fn show_rejects_an_unknown_id() {
     dicho().args(["show", "missing"]).assert().failure();
+}
+
+#[test]
+fn search_matches_accented_text_from_an_unaccented_query() {
+    dicho()
+        .args(["search", "abarca"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("refran-010"));
+}
+
+#[test]
+fn search_matches_translation_and_source() {
+    dicho()
+        .args(["search", "cobbler"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("refran-035"));
+    dicho()
+        .args(["search", "sbarbi"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("refran-021"));
+}
+
+#[test]
+fn search_with_no_matches_is_empty() {
+    let output = dicho()
+        .args(["search", "notpresent"])
+        .output()
+        .expect("command should run");
+    assert!(output.status.success());
+    assert!(output.stdout.is_empty());
 }
 
 #[test]

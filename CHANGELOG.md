@@ -42,4 +42,10 @@
 - Grow the curated collection from 20 to 40 entries using Sbarbi 1922 as the primary public domain source.
 - Record the source citation in data/raw/SOURCES.md.
 
+## v0.2.1: Search
+
+- Add search across Spanish text, English translation, tags, source, author, and vocabulary.
+- Fold Spanish diacritics and case so unaccented queries match accented text.
+- Add unit and integration tests for search behaviour.
+
 Version milestones are tracked here until tagging begins at v0.3.x.
