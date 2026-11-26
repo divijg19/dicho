@@ -80,7 +80,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.2.2"));
+        .stdout(predicate::str::contains("dicho 0.2.3"));
 }
 
 #[test]
@@ -263,6 +263,62 @@ fn saved_entries_round_trip() {
         .success()
         .stdout(predicate::str::contains("No saved entries."));
 
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn history_records_daily_once_per_date() {
+    let dir = temp_data_dir("history-daily");
+    for _ in 0..2 {
+        dicho().env("DICHO_DATA_DIR", &dir).assert().success();
+    }
+    let output = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .arg("history")
+        .output()
+        .expect("command should run");
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(text.lines().count(), 1);
+    assert!(text.contains("  daily  "));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn history_records_save_and_unsave() {
+    let dir = temp_data_dir("history-save");
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["save", "refran-001"])
+        .assert()
+        .success();
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["unsave", "refran-001"])
+        .assert()
+        .success();
+    let output = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["history", "--limit", "5"])
+        .output()
+        .expect("command should run");
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(text.lines().count(), 2);
+    assert!(text.contains("  save  refran-001"));
+    assert!(text.contains("  unsave  refran-001"));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn history_is_empty_when_nothing_was_recorded() {
+    let dir = temp_data_dir("history-empty");
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .arg("history")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("No history yet."));
     fs::remove_dir_all(&dir).ok();
 }
 

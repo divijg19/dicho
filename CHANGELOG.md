@@ -55,4 +55,11 @@
 - Resolve the data path from DICHO_DATA_DIR, XDG_DATA_HOME, or the home directory.
 - Add unit and integration tests for filters and saved entry round trips.
 
+## v0.2.3: Recent content history
+
+- Add an append only JSONL event log under the local data directory.
+- Record daily encounters once per UTC date, plus save and unsave events.
+- Add a history command with a limit option.
+- Add unit and integration tests for event rendering and deduplication.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

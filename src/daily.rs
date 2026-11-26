@@ -39,13 +39,31 @@ pub fn random<'a>(entries: &'a [Entry], date: &str) -> &'a Entry {
 
 /// Format the current UTC date as YYYY-MM-DD.
 pub fn today() -> Result<String> {
-    let seconds = SystemTime::now()
-        .duration_since(UNIX_EPOCH)
-        .context("system clock is before the Unix epoch")?
-        .as_secs() as i64;
+    let seconds = current_seconds()?;
     let days = seconds.div_euclid(86_400);
     let (year, month, day) = civil_from_days(days);
     Ok(format!("{year:04}-{month:02}-{day:02}"))
+}
+
+/// Format the current UTC instant as an ISO style timestamp.
+pub fn timestamp() -> Result<String> {
+    let seconds = current_seconds()?;
+    let days = seconds.div_euclid(86_400);
+    let time = seconds.rem_euclid(86_400);
+    let (year, month, day) = civil_from_days(days);
+    let hour = time / 3600;
+    let minute = (time % 3600) / 60;
+    let second = time % 60;
+    Ok(format!(
+        "{year:04}-{month:02}-{day:02}T{hour:02}:{minute:02}:{second:02}Z"
+    ))
+}
+
+fn current_seconds() -> Result<i64> {
+    Ok(SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .context("system clock is before the Unix epoch")?
+        .as_secs() as i64)
 }
 
 fn civil_from_days(days: i64) -> (i64, i64, i64) {
@@ -85,6 +103,14 @@ mod tests {
     fn civil_from_days_matches_known_dates() {
         assert_eq!(civil_from_days(0), (1970, 1, 1));
         assert_eq!(civil_from_days(20_454), (2026, 1, 1));
+    }
+
+    #[test]
+    fn timestamp_has_utc_form() {
+        let stamp = timestamp().expect("timestamp should be available");
+        assert_eq!(stamp.len(), 20);
+        assert!(stamp.ends_with('Z'));
+        assert!(stamp.contains('T'));
     }
 
     #[test]
