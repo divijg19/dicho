@@ -5,20 +5,20 @@ use crate::content::{Category, Entry};
 use crate::search::fold;
 
 pub fn apply(entries: &[Entry], filters: &Filters) -> Result<Vec<Entry>> {
-    if let Some(min) = filters.min_difficulty {
-        if !(0.0..=1.0).contains(&min) {
-            bail!("min difficulty must be between 0.0 and 1.0");
-        }
+    if let Some(min) = filters.min_difficulty
+        && !(0.0..=1.0).contains(&min)
+    {
+        bail!("min difficulty must be between 0.0 and 1.0");
     }
-    if let Some(max) = filters.max_difficulty {
-        if !(0.0..=1.0).contains(&max) {
-            bail!("max difficulty must be between 0.0 and 1.0");
-        }
+    if let Some(max) = filters.max_difficulty
+        && !(0.0..=1.0).contains(&max)
+    {
+        bail!("max difficulty must be between 0.0 and 1.0");
     }
-    if let (Some(min), Some(max)) = (filters.min_difficulty, filters.max_difficulty) {
-        if min > max {
-            bail!("min difficulty must not exceed max difficulty");
-        }
+    if let (Some(min), Some(max)) = (filters.min_difficulty, filters.max_difficulty)
+        && min > max
+    {
+        bail!("min difficulty must not exceed max difficulty");
     }
 
     let category = match &filters.category {
@@ -33,25 +33,25 @@ pub fn apply(entries: &[Entry], filters: &Filters) -> Result<Vec<Entry>> {
     Ok(entries
         .iter()
         .filter(|entry| {
-            if let Some(expected) = category {
-                if entry.category != expected {
-                    return false;
-                }
+            if let Some(expected) = category
+                && entry.category != expected
+            {
+                return false;
             }
-            if let Some(expected) = &tag {
-                if !entry.tags.iter().any(|item| fold(item) == *expected) {
-                    return false;
-                }
+            if let Some(expected) = &tag
+                && !entry.tags.iter().any(|item| fold(item) == *expected)
+            {
+                return false;
             }
-            if let Some(min) = filters.min_difficulty {
-                if entry.difficulty.is_none_or(|value| value < min) {
-                    return false;
-                }
+            if let Some(min) = filters.min_difficulty
+                && entry.difficulty.is_none_or(|value| value < min)
+            {
+                return false;
             }
-            if let Some(max) = filters.max_difficulty {
-                if entry.difficulty.is_none_or(|value| value > max) {
-                    return false;
-                }
+            if let Some(max) = filters.max_difficulty
+                && entry.difficulty.is_none_or(|value| value > max)
+            {
+                return false;
             }
             true
         })

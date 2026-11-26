@@ -69,4 +69,11 @@
 - Fold category filter values for consistent case handling.
 - Consolidate repeated entry lookup, line printing, and daily selection logic.
 
+## v0.2.5: Storage robustness and tooling consistency
+
+- Write saved state through a temporary file and rename so writes are atomic.
+- Validate the saved state version and deduplicate identifiers on load.
+- Align the Python package version with the CLI release.
+- Add a clippy gate to the documented verification commands.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

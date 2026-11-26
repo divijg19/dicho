@@ -116,10 +116,10 @@ fn validate(entry: &Entry, line_number: usize) -> Result<()> {
     if entry.license.trim().is_empty() {
         return Err(required("license"));
     }
-    if let Some(difficulty) = entry.difficulty {
-        if !(0.0..=1.0).contains(&difficulty) {
-            bail!("line {line_number}: difficulty must be between 0.0 and 1.0");
-        }
+    if let Some(difficulty) = entry.difficulty
+        && !(0.0..=1.0).contains(&difficulty)
+    {
+        bail!("line {line_number}: difficulty must be between 0.0 and 1.0");
     }
     if entry.vocabulary.is_empty() {
         bail!("line {line_number}: vocabulary must not be empty");
