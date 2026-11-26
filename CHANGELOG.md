@@ -48,4 +48,11 @@
 - Fold Spanish diacritics and case so unaccented queries match accented text.
 - Add unit and integration tests for search behaviour.
 
+## v0.2.2: Filters and saved entries
+
+- Add category, tag, and difficulty range filters to browse and search.
+- Add save, unsave, and saved commands backed by a local JSON file.
+- Resolve the data path from DICHO_DATA_DIR, XDG_DATA_HOME, or the home directory.
+- Add unit and integration tests for filters and saved entry round trips.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

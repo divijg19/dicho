@@ -3,7 +3,9 @@ mod cli;
 mod content;
 mod daily;
 mod display;
+mod filter;
 mod search;
+mod storage;
 
 use anyhow::{Result, bail};
 use clap::Parser;
@@ -27,8 +29,9 @@ fn main() -> Result<()> {
             let entry = daily::random(&entries, &daily::today()?);
             display::print_entry(entry, "Random Spanish");
         }
-        Command::Browse => {
-            for line in browse::browse_lines(&entries) {
+        Command::Browse { filters } => {
+            let found = filter::apply(&entries, &filters)?;
+            for line in browse::browse_lines(&found) {
                 println!("{line}");
             }
         }
@@ -48,7 +51,7 @@ fn main() -> Result<()> {
                 println!("{line}");
             }
         }
-        Command::Search { query } => {
+        Command::Search { query, filters } => {
             let query = query.join(" ");
             if query.trim().is_empty() {
                 bail!("search query must not be empty");
@@ -58,8 +61,47 @@ fn main() -> Result<()> {
                 .filter(|entry| search::matches(entry, &query))
                 .cloned()
                 .collect();
+            let found = filter::apply(&found, &filters)?;
             for line in browse::browse_lines(&found) {
                 println!("{line}");
+            }
+        }
+        Command::Save { id } => {
+            if !entries.iter().any(|entry| entry.id == id) {
+                bail!("no entry with id '{id}'");
+            }
+            let store = storage::Store::new(storage::Store::default_path()?);
+            let mut ids = store.load()?;
+            if !ids.contains(&id) {
+                ids.push(id.clone());
+                store.save(&ids)?;
+            }
+            println!("Saved {id}");
+        }
+        Command::Unsave { id } => {
+            let store = storage::Store::new(storage::Store::default_path()?);
+            let ids: Vec<String> = store
+                .load()?
+                .into_iter()
+                .filter(|saved| saved != &id)
+                .collect();
+            store.save(&ids)?;
+            println!("Removed {id}");
+        }
+        Command::Saved => {
+            let store = storage::Store::new(storage::Store::default_path()?);
+            let ids = store.load()?;
+            if ids.is_empty() {
+                println!("No saved entries.");
+            } else {
+                let found: Vec<content::Entry> = ids
+                    .iter()
+                    .filter_map(|id| entries.iter().find(|entry| entry.id == *id))
+                    .cloned()
+                    .collect();
+                for line in browse::browse_lines(&found) {
+                    println!("{line}");
+                }
             }
         }
     }
