@@ -19,6 +19,14 @@ impl Category {
             Self::Saying => "saying",
         }
     }
+
+    pub fn parse(value: &str) -> Option<Self> {
+        match value {
+            "proverb" => Some(Self::Proverb),
+            "saying" => Some(Self::Saying),
+            _ => None,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Deserialize)]

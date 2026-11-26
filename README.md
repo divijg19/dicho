@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.2.1. The CLI shows a daily Spanish entry, provides a browsable collection, and can search it. Translations are drafts awaiting review.
+> Status: v0.2.2. The CLI shows a daily Spanish entry, browses and searches a curated collection, and keeps saved entries locally. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -40,6 +40,11 @@ The default command shows one Spanish entry, its English translation, its catego
 | `dicho categories` | List categories with counts |
 | `dicho tags` | List tags with counts |
 | `dicho search <terms>` | Search text, translation, tags, source, and vocabulary |
+| `dicho save <id>` | Save an entry for later |
+| `dicho unsave <id>` | Remove an entry from saved items |
+| `dicho saved` | List saved entries |
+
+`browse` and `search` accept `--category`, `--tag`, `--min-difficulty`, and `--max-difficulty`. Saved entries live in a local JSON file under the XDG data directory. Set `DICHO_DATA_DIR` to choose a different location.
 
 Search is case insensitive and ignores Spanish accents, so `abarca` finds `abarca` in either form.
 
