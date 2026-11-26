@@ -80,7 +80,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.2.3"));
+        .stdout(predicate::str::contains("dicho 0.2.4"));
 }
 
 #[test]
@@ -144,6 +144,32 @@ fn search_matches_translation_and_source() {
         .assert()
         .success()
         .stdout(predicate::str::contains("refran-021"));
+}
+
+#[test]
+fn whole_word_search_excludes_substrings_unless_requested() {
+    dicho()
+        .args(["search", "clav"])
+        .assert()
+        .success()
+        .stdout(predicate::str::is_empty());
+    dicho()
+        .args(["search", "clav", "--substring"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("refran-028"));
+}
+
+#[test]
+fn category_filter_ignores_case() {
+    let output = dicho()
+        .args(["browse", "--category", "SAYING"])
+        .output()
+        .expect("command should run");
+    assert!(output.status.success());
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(text.lines().count(), 5);
+    assert!(text.lines().all(|line| line.contains("[saying]")));
 }
 
 #[test]

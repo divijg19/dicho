@@ -62,4 +62,11 @@
 - Add a history command with a limit option.
 - Add unit and integration tests for event rendering and deduplication.
 
+## v0.2.4: Search and filter polish
+
+- Fold searchable fields once when building an index instead of on every query.
+- Match whole words by default, with a substring option.
+- Fold category filter values for consistent case handling.
+- Consolidate repeated entry lookup, line printing, and daily selection logic.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

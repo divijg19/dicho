@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::content::Entry;
 
 /// Lowercase text and fold Spanish diacritics to their base letters.
@@ -22,6 +24,68 @@ pub fn fold(text: &str) -> String {
     folded
 }
 
+struct Doc {
+    text: String,
+    words: HashSet<String>,
+}
+
+/// Folded search data built once from the collection.
+pub struct SearchIndex {
+    docs: Vec<Doc>,
+}
+
+impl SearchIndex {
+    pub fn new(entries: &[Entry]) -> Self {
+        let docs = entries
+            .iter()
+            .map(|entry| {
+                let text = haystack(entry);
+                let words = text
+                    .split(|character: char| !character.is_alphanumeric())
+                    .filter(|word| !word.is_empty())
+                    .map(str::to_owned)
+                    .collect();
+                Doc { text, words }
+            })
+            .collect();
+        Self { docs }
+    }
+
+    pub fn matches(&self, index: usize, query: &Query) -> bool {
+        let Some(doc) = self.docs.get(index) else {
+            return false;
+        };
+        if query.substring {
+            query.terms.iter().all(|term| doc.text.contains(term))
+        } else {
+            query.terms.iter().all(|term| doc.words.contains(term))
+        }
+    }
+}
+
+/// A folded query with whole word matching by default.
+pub struct Query {
+    terms: Vec<String>,
+    substring: bool,
+}
+
+impl Query {
+    pub fn parse(text: &str, substring: bool) -> Self {
+        Self {
+            terms: text
+                .split_whitespace()
+                .map(fold)
+                .filter(|term| !term.is_empty())
+                .collect(),
+            substring,
+        }
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.terms.is_empty()
+    }
+}
+
 fn haystack(entry: &Entry) -> String {
     let mut parts = vec![entry.es.clone(), entry.en.clone(), entry.source.clone()];
     if let Some(author) = &entry.author {
@@ -33,10 +97,6 @@ fn haystack(entry: &Entry) -> String {
         parts.push(item.meaning.clone());
     }
     fold(&parts.join(" "))
-}
-
-pub fn matches(entry: &Entry, query: &str) -> bool {
-    haystack(entry).contains(&fold(query))
 }
 
 #[cfg(test)]
@@ -58,10 +118,13 @@ mod tests {
     #[test]
     fn search_matches_spanish_text_without_accents() {
         let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let query = Query::parse("abarca", false);
         let found: Vec<&str> = collection
             .iter()
-            .filter(|entry| matches(entry, "abarca"))
-            .map(|entry| entry.id.as_str())
+            .enumerate()
+            .filter(|(position, _)| index.matches(*position, &query))
+            .map(|(_, entry)| entry.id.as_str())
             .collect();
         assert!(found.contains(&"refran-010"));
     }
@@ -69,30 +132,43 @@ mod tests {
     #[test]
     fn search_matches_english_translation() {
         let collection = entries();
-        let found: Vec<&str> = collection
-            .iter()
-            .filter(|entry| matches(entry, "cobbler"))
-            .map(|entry| entry.id.as_str())
-            .collect();
-        assert!(found.contains(&"refran-035"));
+        let index = SearchIndex::new(&collection);
+        let query = Query::parse("cobbler", false);
+        assert!(index.matches(34, &query));
     }
 
     #[test]
-    fn search_matches_tags_and_source() {
-        assert!(
-            entries()
-                .iter()
-                .any(|entry| matches(entry, "sbarbi") && entry.id == "refran-021")
-        );
-        assert!(
-            entries()
-                .iter()
-                .any(|entry| matches(entry, "optimism") && entry.id == "refran-011")
-        );
+    fn search_distinguishes_words_from_substrings() {
+        let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let word = Query::parse("clavo", false);
+        let fragment = Query::parse("clav", false);
+        let substring = Query::parse("clav", true);
+        assert!(index.matches(27, &word));
+        assert!(!index.matches(27, &fragment));
+        assert!(index.matches(27, &substring));
+    }
+
+    #[test]
+    fn multi_term_queries_require_all_terms() {
+        let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let both = Query::parse("clavo saca", false);
+        let one = Query::parse("clavo missing", false);
+        assert!(index.matches(27, &both));
+        assert!(!index.matches(27, &one));
     }
 
     #[test]
     fn search_can_find_no_entries() {
-        assert!(entries().iter().all(|entry| !matches(entry, "notpresent")));
+        let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let query = Query::parse("notpresent", false);
+        assert!(
+            collection
+                .iter()
+                .enumerate()
+                .all(|(position, _)| !index.matches(position, &query))
+        );
     }
 }
