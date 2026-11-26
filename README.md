@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.2.0. The CLI shows a daily Spanish entry and provides a browsable collection. Translations are drafts awaiting review.
+> Status: v0.2.1. The CLI shows a daily Spanish entry, provides a browsable collection, and can search it. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -39,6 +39,9 @@ The default command shows one Spanish entry, its English translation, its catego
 | `dicho show <id>` | Show one entry in full |
 | `dicho categories` | List categories with counts |
 | `dicho tags` | List tags with counts |
+| `dicho search <terms>` | Search text, translation, tags, source, and vocabulary |
+
+Search is case insensitive and ignores Spanish accents, so `abarca` finds `abarca` in either form.
 
 ## Repository layout
 

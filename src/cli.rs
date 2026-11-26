@@ -26,6 +26,12 @@ pub enum Command {
     Categories,
     /// List tags with entry counts
     Tags,
+    /// Search entries across text, translation, tags, source, and vocabulary
+    Search {
+        /// Terms to search for
+        #[arg(required = true)]
+        query: Vec<String>,
+    },
 }
 
 #[cfg(test)]
@@ -45,6 +51,12 @@ mod tests {
                 .unwrap_or_else(|_| panic!("{name} should parse"));
             assert!(cli.command.is_some());
         }
+    }
+
+    #[test]
+    fn search_requires_a_query() {
+        assert!(Cli::try_parse_from(["dicho", "search"]).is_err());
+        assert!(Cli::try_parse_from(["dicho", "search", "un", "clavo"]).is_ok());
     }
 
     #[test]

@@ -3,6 +3,7 @@ mod cli;
 mod content;
 mod daily;
 mod display;
+mod search;
 
 use anyhow::{Result, bail};
 use clap::Parser;
@@ -44,6 +45,20 @@ fn main() -> Result<()> {
         }
         Command::Tags => {
             for line in browse::tag_lines(&entries) {
+                println!("{line}");
+            }
+        }
+        Command::Search { query } => {
+            let query = query.join(" ");
+            if query.trim().is_empty() {
+                bail!("search query must not be empty");
+            }
+            let found: Vec<content::Entry> = entries
+                .iter()
+                .filter(|entry| search::matches(entry, &query))
+                .cloned()
+                .collect();
+            for line in browse::browse_lines(&found) {
                 println!("{line}");
             }
         }
