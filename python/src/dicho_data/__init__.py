@@ -4,4 +4,4 @@ This package is not a runtime dependency of the Rust CLI. It produces
 validated datasets and derived artifacts for the application to consume.
 """
 
-__version__ = "0.0.2"
+__version__ = "0.2.5"

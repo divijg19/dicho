@@ -14,6 +14,7 @@ Development happens on version side branches off `main`, named by minor version:
 
 ```sh
 cargo fmt --all -- --check
+cargo clippy --all-targets -- -D warnings
 cargo test
 uv run --project python python -m unittest discover -s python/tests
 ```
