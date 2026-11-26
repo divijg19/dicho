@@ -35,4 +35,11 @@
 - Test that a range of dates maps to more than one entry.
 - Add a command reference to the README and document the UTC rollover.
 
+## v0.2.0: Browsing and inspection
+
+- Add browse, show, categories, and tags commands.
+- Add a numeric heuristic difficulty estimate to every entry.
+- Grow the curated collection from 20 to 40 entries using Sbarbi 1922 as the primary public domain source.
+- Record the source citation in data/raw/SOURCES.md.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

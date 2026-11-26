@@ -46,6 +46,8 @@ pub struct Entry {
     pub license: String,
     #[serde(default)]
     pub tags: Vec<String>,
+    #[serde(default)]
+    pub difficulty: Option<f32>,
     pub translation_status: TranslationStatus,
     #[serde(default)]
     pub vocabulary: Vec<Vocabulary>,
@@ -106,6 +108,11 @@ fn validate(entry: &Entry, line_number: usize) -> Result<()> {
     if entry.license.trim().is_empty() {
         return Err(required("license"));
     }
+    if let Some(difficulty) = entry.difficulty {
+        if !(0.0..=1.0).contains(&difficulty) {
+            bail!("line {line_number}: difficulty must be between 0.0 and 1.0");
+        }
+    }
     if entry.vocabulary.is_empty() {
         bail!("line {line_number}: vocabulary must not be empty");
     }
@@ -135,7 +142,7 @@ mod tests {
     #[test]
     fn collection_is_well_formed() {
         let entries = load().expect("embedded collection should parse");
-        assert_eq!(entries.len(), 20);
+        assert_eq!(entries.len(), 40);
     }
 
     #[test]
@@ -171,6 +178,16 @@ mod tests {
         let raw = SAMPLE.replace("\"es\":\"Hola.\",", "");
         let error = parse(&raw).expect_err("missing field should fail");
         assert!(error.to_string().contains("line 1"));
+    }
+
+    #[test]
+    fn parse_rejects_difficulty_out_of_range() {
+        let raw = SAMPLE.replace(
+            "\"translation_status\"",
+            "\"difficulty\":1.5,\"translation_status\"",
+        );
+        let error = parse(&raw).expect_err("invalid difficulty should fail");
+        assert!(error.to_string().contains("difficulty"));
     }
 
     #[test]
