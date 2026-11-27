@@ -2,4 +2,6 @@
 
 Immutable source material for `dicho`, kept distinct from everything derived from it.
 
-For each source, record the URL or bibliographic reference, the access date, and licence evidence alongside the material. See [the provenance policy](../../docs/CONTENT_PROVENANCE.md).
+`SOURCES.md` records bibliographic details, licence evidence, and access dates. `*.jsonl` files hold verified source excerpts with these fields: `text`, `source`, `license`, `locator`, and `access_date`.
+
+Never hand edit derived files in `imported`, `processed`, or `artifacts`. Change the raw record or the pipeline instead.

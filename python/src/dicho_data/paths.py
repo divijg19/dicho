@@ -19,3 +19,13 @@ def repo_root() -> Path:
         if (candidate / MARKER).exists():
             return candidate
     raise RuntimeError("cannot locate the dicho repository root")
+
+
+DATA_DIRECTORIES = ("raw", "imported", "curated", "processed", "artifacts")
+
+
+def data_path(name: str) -> Path:
+    """Return a path inside the repository data directory."""
+    if name not in DATA_DIRECTORIES:
+        raise ValueError(f"unknown data directory: {name}")
+    return repo_root() / "data" / name

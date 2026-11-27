@@ -1,0 +1,31 @@
+{
+  "candidates": {
+    "duplicate": 20,
+    "new": 0,
+    "total": 20
+  },
+  "entries": 40,
+  "error_kinds": {},
+  "errors": 0,
+  "findings": {
+    "draft_translation": 40,
+    "source_citation_missing": 20
+  },
+  "inputs": {
+    "curated": {
+      "path": "data/curated/entries.jsonl",
+      "sha256": "e51e2e10864e059a1e3fc6e059ddcf1a2dad77c4cfd27a236c2d0411965c4b08"
+    },
+    "processed": {
+      "path": "data/processed/candidates.jsonl",
+      "sha256": "b3b03349a956a57489124ff58e6f04e1ce7f1d0fdb5eb1d4f4b23e4f91ae4918"
+    },
+    "raw": [
+      {
+        "name": "sbarbi-1922-excerpts.jsonl",
+        "sha256": "8de98c614e3649a4d82e41cc97b3c4d2db3b0d8e13f558607832a987bb8ac026"
+      }
+    ]
+  },
+  "schema_version": 1
+}

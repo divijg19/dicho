@@ -83,4 +83,12 @@
 - Report draft translations and missing dated source citations as quality findings.
 - Locate repository data independently of the current directory, with a DICHO_ROOT override.
 
+## v0.3.1: Reproducible data pipeline
+
+- Add import, normalise, report, export, and regenerate stages using only the standard library.
+- Record verified Sbarbi excerpts as raw source material with provenance.
+- Deduplicate imported excerpts against curated entries using folded Spanish text.
+- Write deterministic quality report and corpus artifacts with input digests.
+- Add CI verification that regenerates derived data and fails on stale artifacts.
+
 Version milestones are tracked here until tagging begins at v0.3.x.
