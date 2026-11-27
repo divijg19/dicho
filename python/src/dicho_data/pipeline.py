@@ -207,10 +207,27 @@ def regenerate(root: Path | None = None) -> dict[str, Any]:
     )
     corpus = export_corpus(curated, data / "artifacts" / "corpus.json")
 
+    from .stats import statistics
+    from .transform import transform
+
+    corpus_path = data / "artifacts" / "corpus.json"
+    stats = statistics(
+        corpus_path,
+        data / "artifacts" / "corpus-statistics.json",
+        data / "artifacts" / "corpus-statistics.md",
+    )
+    transform(
+        corpus_path,
+        data / "processed" / "entries.csv",
+        data / "processed" / "vocabulary.csv",
+        data / "processed" / "tags.csv",
+    )
+
     return {
         "imported_files": len(imported),
         "candidates": len(candidates),
         "entries": report["entries"],
         "errors": report["errors"],
         "corpus_entries": len(corpus["entries"]),
+        "statistics_entries": stats["entry_count"],
     }

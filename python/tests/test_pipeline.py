@@ -112,8 +112,13 @@ class PipelineTest(unittest.TestCase):
             generated = [
                 root / "data" / "imported" / "source.jsonl",
                 root / "data" / "processed" / "candidates.jsonl",
+                root / "data" / "processed" / "entries.csv",
+                root / "data" / "processed" / "vocabulary.csv",
+                root / "data" / "processed" / "tags.csv",
                 root / "data" / "artifacts" / "quality-report.json",
                 root / "data" / "artifacts" / "corpus.json",
+                root / "data" / "artifacts" / "corpus-statistics.json",
+                root / "data" / "artifacts" / "corpus-statistics.md",
             ]
             before = [path.read_bytes() for path in generated]
             second = regenerate(root)

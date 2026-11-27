@@ -100,13 +100,13 @@ impl Store {
 mod tests {
     use super::*;
 
-    fn test_dir() -> PathBuf {
-        std::env::temp_dir().join(format!("dicho-store-test-{}", std::process::id()))
+    fn test_dir(name: &str) -> PathBuf {
+        std::env::temp_dir().join(format!("dicho-store-test-{name}-{}", std::process::id()))
     }
 
     #[test]
     fn save_and_load_round_trip() {
-        let dir = test_dir();
+        let dir = test_dir("round-trip");
         let store = Store::new(dir.join("saved.json"));
         let ids = vec!["refran-001".to_owned(), "refran-040".to_owned()];
         store.save(&ids).expect("save should succeed");
@@ -116,13 +116,13 @@ mod tests {
 
     #[test]
     fn missing_file_loads_as_empty() {
-        let store = Store::new(test_dir().join("missing.json"));
+        let store = Store::new(test_dir("missing").join("missing.json"));
         assert!(store.load().expect("load should succeed").is_empty());
     }
 
     #[test]
     fn load_deduplicates_ids() {
-        let dir = test_dir();
+        let dir = test_dir("dedupe");
         let store = Store::new(dir.join("saved.json"));
         let ids = vec!["refran-001".to_owned(), "refran-001".to_owned()];
         store.save(&ids).expect("save should succeed");
@@ -132,7 +132,7 @@ mod tests {
 
     #[test]
     fn load_rejects_unknown_version() {
-        let dir = test_dir();
+        let dir = test_dir("version");
         let path = dir.join("saved.json");
         fs::create_dir_all(&dir).expect("directory should be created");
         fs::write(&path, "{\"version\":9,\"ids\":[]}").expect("fixture should be written");
