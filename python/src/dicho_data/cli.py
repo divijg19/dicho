@@ -81,6 +81,23 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--curated", type=str, help="curated entries.jsonl")
     export.add_argument("--output", type=str, help="corpus path")
 
+    stats_command = commands.add_parser(
+        "stats",
+        help="write pandas corpus statistics and a markdown report",
+    )
+    stats_command.add_argument("--corpus", type=str, help="corpus artifact")
+    stats_command.add_argument("--json-output", type=str, help="JSON statistics path")
+    stats_command.add_argument("--markdown-output", type=str, help="Markdown report path")
+
+    transform_command = commands.add_parser(
+        "transform",
+        help="write Polars tabular artifacts",
+    )
+    transform_command.add_argument("--corpus", type=str, help="corpus artifact")
+    transform_command.add_argument("--entries", type=str, help="entries CSV path")
+    transform_command.add_argument("--vocabulary", type=str, help="vocabulary CSV path")
+    transform_command.add_argument("--tags", type=str, help="tags CSV path")
+
     regenerate_command = commands.add_parser(
         "regenerate",
         help="run every derived stage in order",
@@ -146,6 +163,27 @@ def main(argv: list[str] | None = None) -> int:
         output = Path(args.output) if args.output else data_path("artifacts") / "corpus.json"
         payload = export_corpus(curated, output)
         print(f"Exported {len(payload['entries'])} entries")
+        return 0
+
+    if args.command == "stats":
+        from .stats import statistics
+
+        corpus = Path(args.corpus) if args.corpus else data_path("artifacts") / "corpus.json"
+        json_output = Path(args.json_output) if args.json_output else None
+        markdown_output = Path(args.markdown_output) if args.markdown_output else None
+        result = statistics(corpus, json_output, markdown_output)
+        print(f"Statistics: {result['entry_count']} entries")
+        return 0
+
+    if args.command == "transform":
+        from .transform import transform
+
+        corpus = Path(args.corpus) if args.corpus else data_path("artifacts") / "corpus.json"
+        entries = Path(args.entries) if args.entries else None
+        vocabulary = Path(args.vocabulary) if args.vocabulary else None
+        tags = Path(args.tags) if args.tags else None
+        tables = transform(corpus, entries, vocabulary, tags)
+        print(f"Transformed {tables['entries'].height} entries")
         return 0
 
     if args.command == "regenerate":

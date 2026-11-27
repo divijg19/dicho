@@ -38,6 +38,19 @@ uv run --project python python -m dicho_data regenerate
 
 Generated files are committed. CI runs `regenerate` and fails if the generated files differ, so changes to raw or curated data must be accompanied by regenerated artifacts. Quality findings are baselined through the committed report rather than by failing validation.
 
+## Analysis
+
+From the repository root:
+
+```sh
+uv run --project python python -m dicho_data stats
+uv run --project python python -m dicho_data transform
+```
+
+`stats` uses pandas to write `data/artifacts/corpus-statistics.json` and a Markdown summary. Its word frequency and type token ratio use surface level tokenisation and are not linguistic annotations. `transform` uses Polars to write `entries.csv`, `vocabulary.csv`, and `tags.csv` in `data/processed`. Both commands accept path overrides. They are also part of `regenerate`, so CI verifies their outputs.
+
+pandas and polars are regular dependencies of the package and are locked in `uv.lock`.
+
 ## Tests
 
 ```sh

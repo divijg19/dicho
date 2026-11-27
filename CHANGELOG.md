@@ -91,4 +91,13 @@
 - Write deterministic quality report and corpus artifacts with input digests.
 - Add CI verification that regenerates derived data and fails on stale artifacts.
 
+## v0.3.2: Corpus statistics and tabular transformation
+
+- Add pandas corpus statistics with distributions, completeness, lengths, and surface level word frequency.
+- Add Polars transforms that write deterministic entries, vocabulary, and tag tables.
+- Generate JSON and Markdown statistics reports.
+- Fold analysis and transformation into regenerate and CI artifact checks.
+- Extend byte deterministic regeneration tests to every generated artifact.
+- Isolate storage unit tests so parallel runs cannot share a temporary directory.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

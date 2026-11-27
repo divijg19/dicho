@@ -134,5 +134,67 @@ class CliTest(unittest.TestCase):
             self.assertTrue((root / "data" / "artifacts" / "corpus.json").exists())
 
 
+    def test_stats_and_transform_commands(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            corpus = root / "corpus.json"
+            corpus.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "source_sha256": "digest",
+                        "entries": [json.loads(SAMPLE)],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            json_output = root / "stats.json"
+            markdown_output = root / "stats.md"
+            entries_output = root / "entries.csv"
+            vocabulary_output = root / "vocabulary.csv"
+            tags_output = root / "tags.csv"
+
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(
+                    main(
+                        [
+                            "stats",
+                            "--corpus",
+                            str(corpus),
+                            "--json-output",
+                            str(json_output),
+                            "--markdown-output",
+                            str(markdown_output),
+                        ]
+                    ),
+                    0,
+                )
+                self.assertEqual(
+                    main(
+                        [
+                            "transform",
+                            "--corpus",
+                            str(corpus),
+                            "--entries",
+                            str(entries_output),
+                            "--vocabulary",
+                            str(vocabulary_output),
+                            "--tags",
+                            str(tags_output),
+                        ]
+                    ),
+                    0,
+                )
+
+            for path in (
+                json_output,
+                markdown_output,
+                entries_output,
+                vocabulary_output,
+                tags_output,
+            ):
+                self.assertTrue(path.exists())
+
+
 if __name__ == "__main__":
     unittest.main()
