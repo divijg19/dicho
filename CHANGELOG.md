@@ -76,4 +76,11 @@
 - Align the Python package version with the CLI release.
 - Add a clippy gate to the documented verification commands.
 
+## v0.3.0: Canonical corpus and validation
+
+- Make Python the canonical owner of the entry schema and validation rules.
+- Add a validate command with text, strict, and JSON report modes.
+- Report draft translations and missing dated source citations as quality findings.
+- Locate repository data independently of the current directory, with a DICHO_ROOT override.
+
 Version milestones are tracked here until tagging begins at v0.3.x.
