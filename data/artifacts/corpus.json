@@ -1,0 +1,932 @@
+{
+  "entries": [
+    {
+      "category": "proverb",
+      "difficulty": 0.15,
+      "en": "Better late than never.",
+      "es": "Más vale tarde que nunca.",
+      "id": "refran-001",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "time",
+        "patience"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "it is worth, from valer",
+          "term": "vale"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "Out of sight, out of mind.",
+      "es": "Ojos que no ven, corazón que no siente.",
+      "id": "refran-002",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "perception"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "eyes",
+          "term": "ojos"
+        },
+        {
+          "meaning": "heart",
+          "term": "corazón"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.45,
+      "en": "There is a long way between saying and doing.",
+      "es": "Del dicho al hecho hay mucho trecho.",
+      "id": "refran-003",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "actions"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "saying, from decir",
+          "term": "dicho"
+        },
+        {
+          "meaning": "deed",
+          "term": "hecho"
+        },
+        {
+          "meaning": "distance",
+          "term": "trecho"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "Prevention is better than cure.",
+      "es": "Más vale prevenir que curar.",
+      "id": "refran-004",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "preparation"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "to prevent",
+          "term": "prevenir"
+        },
+        {
+          "meaning": "to cure",
+          "term": "curar"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.25,
+      "en": "Where there is a will, there is a way.",
+      "es": "Donde hay voluntad, hay camino.",
+      "id": "refran-005",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "determination"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "will",
+          "term": "voluntad"
+        },
+        {
+          "meaning": "way, path",
+          "term": "camino"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "Whoever does not take risks does not win.",
+      "es": "Quien no arriesga, no gana.",
+      "id": "refran-006",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "risk"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "risks, from arriesgar",
+          "term": "arriesga"
+        },
+        {
+          "meaning": "wins, from ganar",
+          "term": "gana"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.15,
+      "en": "Little by little one goes far.",
+      "es": "Poco a poco se va lejos.",
+      "id": "refran-007",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "perseverance"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "little",
+          "term": "poco"
+        },
+        {
+          "meaning": "far",
+          "term": "lejos"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "It is never too late if the outcome is good.",
+      "es": "Nunca es tarde si la dicha es buena.",
+      "id": "refran-008",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "timing"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "good fortune",
+          "term": "dicha"
+        },
+        {
+          "meaning": "late",
+          "term": "tarde"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.2,
+      "en": "Practice makes the master.",
+      "es": "La práctica hace al maestro.",
+      "id": "refran-009",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "practice"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "practice",
+          "term": "práctica"
+        },
+        {
+          "meaning": "master, teacher",
+          "term": "maestro"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.4,
+      "en": "Whoever grasps too much holds little.",
+      "es": "Quien mucho abarca, poco aprieta.",
+      "id": "refran-010",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "moderation"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "grasps, from abarcar",
+          "term": "abarca"
+        },
+        {
+          "meaning": "squeezes, from apretar",
+          "term": "aprieta"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "No evil comes without some good.",
+      "es": "No hay mal que por bien no venga.",
+      "id": "refran-011",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "optimism"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "bad, evil",
+          "term": "mal"
+        },
+        {
+          "meaning": "good, well",
+          "term": "bien"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "Better to be alone than in bad company.",
+      "es": "Más vale solo que mal acompañado.",
+      "id": "refran-012",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "company"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "alone",
+          "term": "solo"
+        },
+        {
+          "meaning": "accompanied",
+          "term": "acompañado"
+        }
+      ]
+    },
+    {
+      "category": "saying",
+      "difficulty": 0.25,
+      "en": "Variety is the spice of life.",
+      "es": "En la variedad está el gusto.",
+      "id": "refran-013",
+      "license": "Public domain",
+      "source": "Traditional Spanish saying, anonymous",
+      "tags": [
+        "taste"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "variety",
+          "term": "variedad"
+        },
+        {
+          "meaning": "taste, pleasure",
+          "term": "gusto"
+        }
+      ]
+    },
+    {
+      "category": "saying",
+      "difficulty": 0.25,
+      "en": "Necessity compels.",
+      "es": "La necesidad obliga.",
+      "id": "refran-014",
+      "license": "Public domain",
+      "source": "Traditional Spanish saying, anonymous",
+      "tags": [
+        "necessity"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "necessity",
+          "term": "necesidad"
+        },
+        {
+          "meaning": "compels, from obligar",
+          "term": "obliga"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.4,
+      "en": "A bird in the hand is worth a hundred flying.",
+      "es": "Más vale un ave en mano que cien volando.",
+      "id": "refran-015",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "practicality"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "bird",
+          "term": "ave"
+        },
+        {
+          "meaning": "hand",
+          "term": "mano"
+        },
+        {
+          "meaning": "flying, from volar",
+          "term": "volando"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "Do not judge a book by its cover.",
+      "es": "No juzgues un libro por su portada.",
+      "id": "refran-016",
+      "license": "Public domain",
+      "source": "Traditional Spanish saying, anonymous",
+      "tags": [
+        "judgement"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "you judge, from juzgar",
+          "term": "juzgues"
+        },
+        {
+          "meaning": "cover",
+          "term": "portada"
+        }
+      ]
+    },
+    {
+      "category": "saying",
+      "difficulty": 0.4,
+      "en": "Tell me who you walk with and I will tell you who you are.",
+      "es": "Dime con quién andas y te diré quién eres.",
+      "id": "refran-017",
+      "license": "Public domain",
+      "source": "Traditional Spanish saying, anonymous",
+      "tags": [
+        "friendship"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "you walk, from andar",
+          "term": "andas"
+        },
+        {
+          "meaning": "you are, from ser",
+          "term": "eres"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.45,
+      "en": "Whoever talks a lot makes many mistakes.",
+      "es": "El que mucho habla, mucho yerra.",
+      "id": "refran-018",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "speech"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "speaks, from hablar",
+          "term": "habla"
+        },
+        {
+          "meaning": "errs, from errar",
+          "term": "yerra"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "God helps the one who rises early.",
+      "es": "Al que madruga, Dios lo ayuda.",
+      "id": "refran-019",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "diligence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "rises early, from madrugar",
+          "term": "madruga"
+        },
+        {
+          "meaning": "helps, from ayudar",
+          "term": "ayuda"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.2,
+      "en": "After the rain, the sun comes out.",
+      "es": "Después de la lluvia, sale el sol.",
+      "id": "refran-020",
+      "license": "Public domain",
+      "source": "Traditional Spanish refrán, anonymous",
+      "tags": [
+        "optimism"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "rain",
+          "term": "lluvia"
+        },
+        {
+          "meaning": "sun",
+          "term": "sol"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.25,
+      "en": "Hunger is the best sauce.",
+      "es": "A buen hambre no hay pan duro.",
+      "id": "refran-021",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "appetite",
+        "simplicity"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "hunger",
+          "term": "hambre"
+        },
+        {
+          "meaning": "hard",
+          "term": "duro"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.25,
+      "en": "A closed mouth catches no flies.",
+      "es": "En boca cerrada no entran moscas.",
+      "id": "refran-022",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "silence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "mouth",
+          "term": "boca"
+        },
+        {
+          "meaning": "flies",
+          "term": "moscas"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.45,
+      "en": "Wherever you go, do as you find.",
+      "es": "Adonde fueres, haz como vieres.",
+      "id": "refran-023",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "adaptation"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "you go, from ir",
+          "term": "fueres"
+        },
+        {
+          "meaning": "you see, from ver",
+          "term": "vieres"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "Raise crows and they will peck out your eyes.",
+      "es": "Cría cuervos y te sacarán los ojos.",
+      "id": "refran-024",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "ingratitude"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "crows",
+          "term": "cuervos"
+        },
+        {
+          "meaning": "eyes",
+          "term": "ojos"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "There is no worse deaf person than one who refuses to hear.",
+      "es": "No hay peor sordo que el que no quiere oír.",
+      "id": "refran-025",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "refusal"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "deaf",
+          "term": "sordo"
+        },
+        {
+          "meaning": "to hear",
+          "term": "oír"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.4,
+      "en": "Whoever sows the wind reaps the storm.",
+      "es": "El que siembra vientos, recoge tempestades.",
+      "id": "refran-026",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "consequences"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "sows, from sembrar",
+          "term": "siembra"
+        },
+        {
+          "meaning": "storms",
+          "term": "tempestades"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.25,
+      "en": "God helps those who help themselves.",
+      "es": "Dios ayuda a los que se ayudan.",
+      "id": "refran-027",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "diligence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "help, from ayudar",
+          "term": "ayudan"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.2,
+      "en": "One nail drives out another.",
+      "es": "Un clavo saca otro clavo.",
+      "id": "refran-028",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "replacement"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "nail",
+          "term": "clavo"
+        },
+        {
+          "meaning": "takes out, from sacar",
+          "term": "saca"
+        }
+      ]
+    },
+    {
+      "category": "saying",
+      "difficulty": 0.15,
+      "en": "New year, new life.",
+      "es": "Año nuevo, vida nueva.",
+      "id": "refran-029",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "renewal"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "year",
+          "term": "año"
+        },
+        {
+          "meaning": "life",
+          "term": "vida"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.2,
+      "en": "Keep a good face in bad times.",
+      "es": "A mal tiempo, buena cara.",
+      "id": "refran-030",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "resilience"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "time, weather",
+          "term": "tiempo"
+        },
+        {
+          "meaning": "face",
+          "term": "cara"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "To foolish words, deaf ears.",
+      "es": "A palabras necias, oídos sordos.",
+      "id": "refran-031",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "silence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "foolish",
+          "term": "necias"
+        },
+        {
+          "meaning": "ears",
+          "term": "oídos"
+        }
+      ]
+    },
+    {
+      "category": "saying",
+      "difficulty": 0.35,
+      "en": "Light comes out of discussion.",
+      "es": "De la discusión brota la luz.",
+      "id": "refran-032",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "dialogue"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "discussion",
+          "term": "discusión"
+        },
+        {
+          "meaning": "springs forth, from brotar",
+          "term": "brota"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.45,
+      "en": "Pray to God, but keep swinging the hammer.",
+      "es": "A Dios rogando y con el mazo dando.",
+      "id": "refran-033",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "diligence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "praying, from rogar",
+          "term": "rogando"
+        },
+        {
+          "meaning": "hammer",
+          "term": "mazo"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.35,
+      "en": "You cannot touch honey without getting sticky.",
+      "es": "El que anda con la miel, algo se le pega.",
+      "id": "refran-034",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "influence"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "honey",
+          "term": "miel"
+        },
+        {
+          "meaning": "sticks, from pegar",
+          "term": "pega"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "Cobbler, stick to your last.",
+      "es": "Zapatero, a tus zapatos.",
+      "id": "refran-035",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "expertise"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "shoemaker",
+          "term": "zapatero"
+        },
+        {
+          "meaning": "shoes",
+          "term": "zapatos"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "Opportunity makes the thief.",
+      "es": "La ocasión hace al ladrón.",
+      "id": "refran-036",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "opportunity"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "opportunity",
+          "term": "ocasión"
+        },
+        {
+          "meaning": "thief",
+          "term": "ladrón"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.3,
+      "en": "There is no worse blind person than one who refuses to see.",
+      "es": "No hay peor ciego que el que no quiere ver.",
+      "id": "refran-037",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "refusal"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "blind",
+          "term": "ciego"
+        },
+        {
+          "meaning": "to see",
+          "term": "ver"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.4,
+      "en": "Once the meal is done, the guests depart.",
+      "es": "Comida hecha, compañía deshecha.",
+      "id": "refran-038",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "company"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "meal",
+          "term": "comida"
+        },
+        {
+          "meaning": "company",
+          "term": "compañía"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.55,
+      "en": "Whoever sows thorns gathers prickles.",
+      "es": "Quien abrojos siembra, espinas coge.",
+      "id": "refran-039",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "consequences"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "caltrops, thorny weeds",
+          "term": "abrojos"
+        },
+        {
+          "meaning": "thorns",
+          "term": "espinas"
+        },
+        {
+          "meaning": "gathers, from coger",
+          "term": "coge"
+        }
+      ]
+    },
+    {
+      "category": "proverb",
+      "difficulty": 0.45,
+      "en": "One olive is gold, two are silver, and the third kills you.",
+      "es": "Aceituna, una es oro, dos plata, y la tercera, mata.",
+      "id": "refran-040",
+      "license": "Public domain",
+      "source": "Sbarbi y Osuna, Diccionario de refranes (1922); traditional refrán, anonymous",
+      "tags": [
+        "moderation"
+      ],
+      "translation_status": "draft",
+      "vocabulary": [
+        {
+          "meaning": "olive",
+          "term": "aceituna"
+        },
+        {
+          "meaning": "silver",
+          "term": "plata"
+        }
+      ]
+    }
+  ],
+  "schema_version": 1,
+  "source_sha256": "e51e2e10864e059a1e3fc6e059ddcf1a2dad77c4cfd27a236c2d0411965c4b08"
+}

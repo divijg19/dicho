@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.3.0. The CLI has a full content library, and the Python package now owns canonical corpus validation. Translations are drafts awaiting review.
+> Status: v0.3.1. The CLI has a full content library, and the Python package owns canonical validation and a reproducible data pipeline. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -24,6 +24,7 @@ cargo run -- repeat                                                  # today's e
 cargo test                                                           # Rust tests
 uv run --project python python -m unittest discover -s python/tests  # Python tests
 uv run --project python python -m dicho_data validate                 # corpus validation
+uv run --project python python -m dicho_data regenerate               # regenerate derived data
 ```
 
 The default command shows one Spanish entry, its English translation, its category, its source, and a featured vocabulary item. Daily selection is deterministic for a given date and dataset. The date is UTC, so the entry changes at 00:00 UTC rather than local midnight.
