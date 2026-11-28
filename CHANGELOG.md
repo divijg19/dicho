@@ -106,4 +106,11 @@
 - Make unsave a silent no-op with no history event when the entry is not saved.
 - Add regression tests for punctuated queries and idempotent unsave.
 
+## v0.4.0: Personal vocabulary collection
+
+- Add personal vocabulary with meanings, examples, notes, creation dates, and saved flags.
+- Associate vocabulary items with curated entries through stable identifiers.
+- Add vocab add, list, search, show, remove, save, and unsave commands.
+- Persist vocabulary locally in a versioned JSON file under the XDG data directory.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

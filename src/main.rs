@@ -5,12 +5,14 @@ mod daily;
 mod display;
 mod filter;
 mod history;
+mod id;
 mod search;
 mod storage;
+mod vocab;
 
 use anyhow::{Result, anyhow};
 use clap::Parser;
-use cli::{Cli, Command};
+use cli::{Cli, Command, VocabCommand};
 
 use crate::content::Entry;
 
@@ -103,6 +105,127 @@ fn main() -> Result<()> {
                 println!("No history yet.");
             } else {
                 print_lines(history::lines(&events));
+            }
+        }
+        Command::Vocab { command } => {
+            let store = vocab::VocabStore::new(vocab::VocabStore::default_path()?);
+            let mut items = store.load()?;
+
+            match command {
+                VocabCommand::Add {
+                    term,
+                    meaning,
+                    example,
+                    notes,
+                    entry_ids,
+                } => {
+                    for id in &entry_ids {
+                        find_entry(&entries, id)?;
+                    }
+                    let item = vocab::VocabItem::new(
+                        term,
+                        meaning,
+                        example,
+                        notes,
+                        entry_ids,
+                        daily::timestamp()?,
+                    );
+                    if let Some(position) = items.iter().position(|existing| existing.id == item.id)
+                    {
+                        let mut changed = false;
+                        for id in &item.entry_ids {
+                            if !items[position].entry_ids.contains(id) {
+                                items[position].entry_ids.push(id.clone());
+                                changed = true;
+                            }
+                        }
+                        if items[position].example.is_none() && item.example.is_some() {
+                            items[position].example = item.example.clone();
+                            changed = true;
+                        }
+                        if items[position].notes.is_none() && item.notes.is_some() {
+                            items[position].notes = item.notes.clone();
+                            changed = true;
+                        }
+                        if changed {
+                            let id = item.id.clone();
+                            store.save(&items)?;
+                            println!("Updated {id}");
+                        } else {
+                            println!("Already have {}", item.id);
+                        }
+                    } else {
+                        let id = item.id.clone();
+                        items.push(item);
+                        store.save(&items)?;
+                        println!("Added {id}");
+                    }
+                }
+                VocabCommand::List {
+                    search,
+                    saved,
+                    entry,
+                } => {
+                    let mut shown: Vec<&vocab::VocabItem> = items.iter().collect();
+                    if let Some(query) = search {
+                        shown.retain(|item| vocab::matches(item, &query));
+                    }
+                    if saved {
+                        shown.retain(|item| item.saved);
+                    }
+                    if let Some(entry) = entry {
+                        shown.retain(|item| item.entry_ids.iter().any(|id| id == &entry));
+                    }
+                    if shown.is_empty() {
+                        println!("No vocabulary items.");
+                    } else {
+                        print_lines(shown.into_iter().map(vocab::line));
+                    }
+                }
+                VocabCommand::Search { query } => {
+                    let found: Vec<String> = items
+                        .iter()
+                        .filter(|item| vocab::matches(item, &query))
+                        .map(vocab::line)
+                        .collect();
+                    if found.is_empty() {
+                        println!("No vocabulary items.");
+                    } else {
+                        print_lines(found);
+                    }
+                }
+                VocabCommand::Show { id } => {
+                    let item = items
+                        .iter()
+                        .find(|item| item.id == id)
+                        .ok_or_else(|| anyhow!("no vocabulary item with id '{id}'"))?;
+                    print_lines(vocab::detail_lines(item));
+                }
+                VocabCommand::Remove { id } => {
+                    if let Some(position) = items.iter().position(|item| item.id == id) {
+                        items.remove(position);
+                        store.save(&items)?;
+                        println!("Removed {id}");
+                    }
+                }
+                VocabCommand::Save { id } => {
+                    if let Some(position) = items.iter().position(|item| item.id == id)
+                        && !items[position].saved
+                    {
+                        items[position].saved = true;
+                        store.save(&items)?;
+                        println!("Saved {id}");
+                    }
+                }
+                VocabCommand::Unsave { id } => {
+                    if let Some(position) = items.iter().position(|item| item.id == id)
+                        && items[position].saved
+                    {
+                        items[position].saved = false;
+                        store.save(&items)?;
+                        println!("Unsaved {id}");
+                    }
+                }
             }
         }
     }
