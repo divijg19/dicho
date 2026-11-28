@@ -7,7 +7,7 @@ from dicho_data import __version__
 
 class SkeletonTest(unittest.TestCase):
     def test_version_matches_foundation_release(self):
-        self.assertEqual(__version__, "0.3.2")
+        self.assertEqual(__version__, "0.3.3")
 
 
 if __name__ == "__main__":
