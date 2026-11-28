@@ -1,11 +1,27 @@
 use std::collections::HashSet;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::{Context, Result, bail};
 use serde::{Deserialize, Serialize};
 
 const STATE_VERSION: u32 = 1;
+
+/// Write a local state file atomically through a temporary file and rename.
+pub fn write_atomic(path: &Path, text: &str) -> Result<()> {
+    let parent = path
+        .parent()
+        .context("state path has no parent directory")?;
+    fs::create_dir_all(parent)?;
+    let file_name = path
+        .file_name()
+        .context("state path has no file name")?
+        .to_string_lossy();
+    let temporary = parent.join(format!(".{file_name}.{}.tmp", std::process::id()));
+    fs::write(&temporary, text).with_context(|| format!("cannot write {}", temporary.display()))?;
+    fs::rename(&temporary, path).with_context(|| format!("cannot replace {}", path.display()))?;
+    Ok(())
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 struct SavedState {
@@ -71,28 +87,12 @@ impl Store {
     }
 
     pub fn save(&self, ids: &[String]) -> Result<()> {
-        let parent = self
-            .path
-            .parent()
-            .context("saved data path has no parent directory")?;
-        fs::create_dir_all(parent)?;
-
         let state = SavedState {
             version: STATE_VERSION,
             ids: ids.to_vec(),
         };
         let text = serde_json::to_string_pretty(&state)?;
-        let file_name = self
-            .path
-            .file_name()
-            .context("saved data path has no file name")?
-            .to_string_lossy();
-        let temporary = parent.join(format!(".{file_name}.{}.tmp", std::process::id()));
-        fs::write(&temporary, format!("{text}\n"))
-            .with_context(|| format!("cannot write {}", temporary.display()))?;
-        fs::rename(&temporary, &self.path)
-            .with_context(|| format!("cannot replace {}", self.path.display()))?;
-        Ok(())
+        write_atomic(&self.path, &format!("{text}\n"))
     }
 }
 

@@ -14,6 +14,16 @@ fn temp_data_dir(name: &str) -> PathBuf {
     dir
 }
 
+fn added_id(output: &[u8]) -> String {
+    String::from_utf8_lossy(output)
+        .lines()
+        .next()
+        .expect("add should print an identifier")
+        .strip_prefix("Added ")
+        .expect("add output should start with Added")
+        .to_owned()
+}
+
 #[test]
 fn root_command_shows_a_daily_entry() {
     dicho()
@@ -80,7 +90,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.3.3"));
+        .stdout(predicate::str::contains("dicho 0.4.0"));
 }
 
 #[test]
@@ -418,5 +428,235 @@ fn repeated_unsave_records_one_event() {
     assert_eq!(text.lines().count(), 2);
     assert!(text.contains("  save  refran-001"));
     assert!(text.contains("  unsave  refran-001"));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn vocab_add_list_search_show_and_remove() {
+    let dir = temp_data_dir("vocab-round-trip");
+    let added = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args([
+            "vocab",
+            "add",
+            "Ábarca",
+            "--meaning",
+            "grasps",
+            "--example",
+            "Quien mucho abarca, poco aprieta.",
+            "--notes",
+            "Useful for describing overreach.",
+            "--entry",
+            "refran-010",
+        ])
+        .output()
+        .expect("command should run");
+    assert!(added.status.success());
+    let id = added_id(&added.stdout);
+
+    let listed = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list"])
+        .output()
+        .expect("command should run");
+    let text = String::from_utf8_lossy(&listed.stdout);
+    assert!(text.contains(&id));
+    assert!(text.contains("Ábarca"));
+
+    let searched = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "search", "abarca"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&searched.stdout).contains(&id));
+
+    let shown = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "show", &id])
+        .output()
+        .expect("command should run");
+    let detail = String::from_utf8_lossy(&shown.stdout);
+    assert!(detail.contains("Useful for describing overreach."));
+    assert!(detail.contains("refran-010"));
+
+    let associated = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list", "--entry", "refran-010"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&associated.stdout).contains(&id));
+    let unrelated = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list", "--entry", "refran-011"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&unrelated.stdout).contains("No vocabulary items."));
+
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "remove", &id])
+        .assert()
+        .success();
+    let empty = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&empty.stdout).contains("No vocabulary items."));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn vocab_saved_flag_filters_items() {
+    let dir = temp_data_dir("vocab-saved");
+    let added = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "add", "lejos", "--meaning", "far"])
+        .output()
+        .expect("command should run");
+    let id = added_id(&added.stdout);
+
+    let empty = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list", "--saved"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&empty.stdout).contains("No vocabulary items."));
+
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "save", &id])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Saved"));
+    let saved = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list", "--saved"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&saved.stdout).contains(&id));
+
+    let repeated = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "save", &id])
+        .output()
+        .expect("command should run");
+    assert!(repeated.stdout.is_empty());
+
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "unsave", &id])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Unsaved"));
+    let empty_again = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list", "--saved"])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&empty_again.stdout).contains("No vocabulary items."));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn vocab_add_rejects_an_unknown_entry() {
+    let dir = temp_data_dir("vocab-unknown-entry");
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args([
+            "vocab",
+            "add",
+            "hola",
+            "--meaning",
+            "hello",
+            "--entry",
+            "missing",
+        ])
+        .assert()
+        .failure();
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn repeated_vocab_add_merges_associations_and_notes() {
+    let dir = temp_data_dir("vocab-merge");
+    let first = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args([
+            "vocab",
+            "add",
+            "ábarca",
+            "--meaning",
+            "grasps",
+            "--entry",
+            "refran-010",
+        ])
+        .output()
+        .expect("command should run");
+    let id = added_id(&first.stdout);
+
+    let second = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args([
+            "vocab",
+            "add",
+            "abarca",
+            "--meaning",
+            "grasps",
+            "--notes",
+            "Also appears elsewhere.",
+            "--entry",
+            "refran-011",
+        ])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&second.stdout).contains("Updated"));
+    let id_after = String::from_utf8_lossy(&second.stdout)
+        .lines()
+        .next()
+        .expect("update should print an identifier")
+        .strip_prefix("Updated ")
+        .expect("update output should start with Updated")
+        .to_owned();
+    assert_eq!(id_after, id);
+
+    for entry in ["refran-010", "refran-011"] {
+        let output = dicho()
+            .env("DICHO_DATA_DIR", &dir)
+            .args(["vocab", "list", "--entry", entry])
+            .output()
+            .expect("command should run");
+        assert!(String::from_utf8_lossy(&output.stdout).contains(&id));
+    }
+    let shown = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "show", &id])
+        .output()
+        .expect("command should run");
+    assert!(String::from_utf8_lossy(&shown.stdout).contains("Also appears elsewhere."));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn same_term_with_different_meaning_creates_distinct_items() {
+    let dir = temp_data_dir("vocab-senses");
+    let bank = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "add", "banco", "--meaning", "bank"])
+        .output()
+        .expect("command should run");
+    let bench = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "add", "banco", "--meaning", "bench"])
+        .output()
+        .expect("command should run");
+    assert_ne!(added_id(&bank.stdout), added_id(&bench.stdout));
+
+    let listed = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["vocab", "list"])
+        .output()
+        .expect("command should run");
+    assert_eq!(String::from_utf8_lossy(&listed.stdout).lines().count(), 2);
     fs::remove_dir_all(&dir).ok();
 }

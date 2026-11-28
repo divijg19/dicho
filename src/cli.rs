@@ -7,6 +7,64 @@ pub struct Cli {
     pub command: Option<Command>,
 }
 
+#[derive(Debug, Clone, Subcommand)]
+pub enum VocabCommand {
+    /// Add a word or expression
+    Add {
+        /// Spanish word or expression
+        term: String,
+        /// Meaning in English
+        #[arg(long)]
+        meaning: String,
+        /// Example sentence
+        #[arg(long)]
+        example: Option<String>,
+        /// Personal note
+        #[arg(long)]
+        notes: Option<String>,
+        /// Curated entry identifier to associate
+        #[arg(long = "entry")]
+        entry_ids: Vec<String>,
+    },
+    /// List personal vocabulary
+    List {
+        /// Filter by text
+        #[arg(long)]
+        search: Option<String>,
+        /// Only saved items
+        #[arg(long)]
+        saved: bool,
+        /// Only items associated with this entry
+        #[arg(long = "entry")]
+        entry: Option<String>,
+    },
+    /// Search personal vocabulary
+    Search {
+        /// Text to find
+        query: String,
+    },
+    /// Show one vocabulary item
+    Show {
+        /// Stable vocabulary identifier
+        id: String,
+    },
+    /// Remove a vocabulary item
+    Remove {
+        /// Stable vocabulary identifier
+        id: String,
+    },
+    /// Mark a vocabulary item as saved
+    Save {
+        /// Stable vocabulary identifier
+        id: String,
+    },
+    /// Remove the saved flag from a vocabulary item
+    Unsave {
+        /// Stable vocabulary identifier
+        id: String,
+    },
+}
+
 #[derive(Debug, Clone, Default, Args)]
 pub struct Filters {
     /// Only entries in this category
@@ -73,6 +131,11 @@ pub enum Command {
         /// Maximum number of events to show
         #[arg(long, default_value_t = 10)]
         limit: usize,
+    },
+    /// Manage personal vocabulary
+    Vocab {
+        #[command(subcommand)]
+        command: VocabCommand,
     },
 }
 

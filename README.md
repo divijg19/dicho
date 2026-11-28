@@ -4,7 +4,7 @@ A Spanish language companion for your terminal.
 
 `dicho` is a local-first, offline-capable command-line tool whose purpose is to make Spanish a recurring part of everyday computing. It combines curated expressions and literature, a personal vocabulary collection, learning history, linguistic analysis, and personalised content discovery.
 
-> Status: v0.3.3. The CLI has a full content library, and the Python package owns canonical validation, a reproducible pipeline, and corpus analysis. Translations are drafts awaiting review.
+> Status: v0.4.0. The CLI adds a personal vocabulary collection alongside the content library. Translations are drafts awaiting review.
 
 ## Principles
 
@@ -47,10 +47,17 @@ The default command shows one Spanish entry, its English translation, its catego
 | `dicho unsave <id>` | Remove an entry from saved items |
 | `dicho saved` | List saved entries |
 | `dicho history` | Show recent learning events |
+| `dicho vocab add <term> --meaning <text>` | Add a personal vocabulary item |
+| `dicho vocab list` | List personal vocabulary |
+| `dicho vocab search <query>` | Search personal vocabulary |
+| `dicho vocab show <id>` | Show one vocabulary item |
+| `dicho vocab remove <id>` | Remove a vocabulary item |
+| `dicho vocab save <id>` | Mark a vocabulary item as saved |
+| `dicho vocab unsave <id>` | Remove the saved flag |
 
-`browse` and `search` accept `--category`, `--tag`, `--min-difficulty`, and `--max-difficulty`. `history` accepts `--limit`. Saved entries and recent events live in local files under the XDG data directory. Set `DICHO_DATA_DIR` to choose a different location. Daily encounters are recorded once per UTC date.
+`browse` and `search` accept `--category`, `--tag`, `--min-difficulty`, and `--max-difficulty`. `history` accepts `--limit`. `vocab add` accepts `--example`, `--notes`, and repeated `--entry` flags to associate an item with curated entries. `vocab list` accepts `--search`, `--saved`, and `--entry`. Saved entries, recent events, and personal vocabulary live in local files under the XDG data directory. Set `DICHO_DATA_DIR` to choose a different location. Daily encounters are recorded once per UTC date.
 
-Search is case insensitive and ignores Spanish accents, so `abarca` finds `abarca` in either form. Punctuation is ignored too. Matching is by whole word by default. Add `--substring` to match inside words.
+Search is case insensitive and ignores Spanish accents, so `abarca` finds `abarca` in either form. Punctuation is ignored too. Matching is by whole word by default. Add `--substring` to match inside words. Vocabulary search matches inside words instead.
 
 ## Repository layout
 
