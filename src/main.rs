@@ -75,14 +75,13 @@ fn main() -> Result<()> {
         }
         Command::Unsave { id } => {
             let store = storage::Store::new(storage::Store::default_path()?);
-            let ids: Vec<String> = store
-                .load()?
-                .into_iter()
-                .filter(|saved| saved != &id)
-                .collect();
-            store.save(&ids)?;
-            history::append(history::EventKind::Unsave, &id)?;
-            println!("Removed {id}");
+            let mut ids = store.load()?;
+            if let Some(position) = ids.iter().position(|saved| saved == &id) {
+                ids.remove(position);
+                store.save(&ids)?;
+                history::append(history::EventKind::Unsave, &id)?;
+                println!("Removed {id}");
+            }
         }
         Command::Saved => {
             let store = storage::Store::new(storage::Store::default_path()?);

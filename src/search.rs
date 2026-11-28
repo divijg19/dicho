@@ -7,6 +7,9 @@ pub fn fold(text: &str) -> String {
     let mut folded = String::new();
     for character in text.chars() {
         for lower in character.to_lowercase() {
+            if ('\u{0300}'..='\u{036f}').contains(&lower) {
+                continue;
+            }
             match lower {
                 'á' | 'à' | 'ä' | 'â' | 'ã' | 'å' => folded.push('a'),
                 'é' | 'è' | 'ë' | 'ê' | 'ẽ' => folded.push('e'),
@@ -22,6 +25,12 @@ pub fn fold(text: &str) -> String {
         }
     }
     folded
+}
+
+/// Split folded text into whole word tokens.
+fn words(text: &str) -> impl Iterator<Item = &str> + '_ {
+    text.split(|character: char| !character.is_alphanumeric())
+        .filter(|word| !word.is_empty())
 }
 
 struct Doc {
@@ -40,12 +49,11 @@ impl SearchIndex {
             .iter()
             .map(|entry| {
                 let text = haystack(entry);
-                let words = text
-                    .split(|character: char| !character.is_alphanumeric())
-                    .filter(|word| !word.is_empty())
-                    .map(str::to_owned)
-                    .collect();
-                Doc { text, words }
+                let word_set = words(&text).map(str::to_owned).collect();
+                Doc {
+                    text,
+                    words: word_set,
+                }
             })
             .collect();
         Self { docs }
@@ -71,12 +79,9 @@ pub struct Query {
 
 impl Query {
     pub fn parse(text: &str, substring: bool) -> Self {
+        let folded = fold(text);
         Self {
-            terms: text
-                .split_whitespace()
-                .map(fold)
-                .filter(|term| !term.is_empty())
-                .collect(),
+            terms: words(&folded).map(str::to_owned).collect(),
             substring,
         }
     }
@@ -107,12 +112,43 @@ mod tests {
         crate::content::load().expect("embedded collection should parse")
     }
 
+    fn position(collection: &[Entry], id: &str) -> usize {
+        collection
+            .iter()
+            .position(|entry| entry.id == id)
+            .unwrap_or_else(|| panic!("missing entry {id}"))
+    }
+
     #[test]
     fn fold_handles_spanish_characters() {
         assert_eq!(fold("ÁBARCA"), "abarca");
         assert_eq!(fold("Corazón"), "corazon");
         assert_eq!(fold("Dime con quién andas"), "dime con quien andas");
         assert_eq!(fold("¿Qué tal?"), "que tal?");
+    }
+
+    #[test]
+    fn fold_strips_combining_marks() {
+        let decomposed = "a\u{0301}barca";
+        assert_eq!(fold(decomposed), "abarca");
+        let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let query = Query::parse(decomposed, false);
+        assert!(index.matches(position(&collection, "refran-010"), &query));
+    }
+
+    #[test]
+    fn query_tokens_ignore_punctuation() {
+        let query = Query::parse("Zapatero, a tus zapatos.", false);
+        assert_eq!(query.terms, vec!["zapatero", "a", "tus", "zapatos"]);
+    }
+
+    #[test]
+    fn punctuated_query_matches_whole_words() {
+        let collection = entries();
+        let index = SearchIndex::new(&collection);
+        let query = Query::parse("Zapatero, a tus zapatos.", false);
+        assert!(index.matches(position(&collection, "refran-035"), &query));
     }
 
     #[test]
@@ -134,7 +170,7 @@ mod tests {
         let collection = entries();
         let index = SearchIndex::new(&collection);
         let query = Query::parse("cobbler", false);
-        assert!(index.matches(34, &query));
+        assert!(index.matches(position(&collection, "refran-035"), &query));
     }
 
     #[test]
@@ -144,9 +180,10 @@ mod tests {
         let word = Query::parse("clavo", false);
         let fragment = Query::parse("clav", false);
         let substring = Query::parse("clav", true);
-        assert!(index.matches(27, &word));
-        assert!(!index.matches(27, &fragment));
-        assert!(index.matches(27, &substring));
+        let target = position(&collection, "refran-028");
+        assert!(index.matches(target, &word));
+        assert!(!index.matches(target, &fragment));
+        assert!(index.matches(target, &substring));
     }
 
     #[test]
@@ -155,8 +192,9 @@ mod tests {
         let index = SearchIndex::new(&collection);
         let both = Query::parse("clavo saca", false);
         let one = Query::parse("clavo missing", false);
-        assert!(index.matches(27, &both));
-        assert!(!index.matches(27, &one));
+        let target = position(&collection, "refran-028");
+        assert!(index.matches(target, &both));
+        assert!(!index.matches(target, &one));
     }
 
     #[test]

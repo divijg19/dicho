@@ -100,4 +100,10 @@
 - Extend byte deterministic regeneration tests to every generated artifact.
 - Isolate storage unit tests so parallel runs cannot share a temporary directory.
 
+## v0.3.3: Search and unsave correctness
+
+- Tokenize queries with the same rule as the search index so punctuation and combining marks no longer break whole word matching.
+- Make unsave a silent no-op with no history event when the entry is not saved.
+- Add regression tests for punctuated queries and idempotent unsave.
+
 Version milestones are tracked here until tagging begins at v0.3.x.

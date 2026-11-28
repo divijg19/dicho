@@ -80,7 +80,7 @@ fn version_flag_reports_package_version() {
         .arg("--version")
         .assert()
         .success()
-        .stdout(predicate::str::contains("dicho 0.3.2"));
+        .stdout(predicate::str::contains("dicho 0.3.3"));
 }
 
 #[test]
@@ -356,5 +356,67 @@ fn cannot_save_an_unknown_id() {
         .args(["save", "missing"])
         .assert()
         .failure();
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn search_ignores_punctuation_in_queries() {
+    dicho()
+        .args(["search", "Zapatero, a tus zapatos."])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("refran-035"));
+}
+
+#[test]
+fn unsave_missing_id_is_a_silent_no_op() {
+    let dir = temp_data_dir("unsave-noop");
+    let output = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["unsave", "refran-001"])
+        .output()
+        .expect("command should run");
+    assert!(output.status.success());
+    assert!(output.stdout.is_empty());
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .arg("history")
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("No history yet."));
+    fs::remove_dir_all(&dir).ok();
+}
+
+#[test]
+fn repeated_unsave_records_one_event() {
+    let dir = temp_data_dir("unsave-repeat");
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["save", "refran-001"])
+        .assert()
+        .success();
+    dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["unsave", "refran-001"])
+        .assert()
+        .success()
+        .stdout(predicate::str::contains("Removed refran-001"));
+    let second = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["unsave", "refran-001"])
+        .output()
+        .expect("command should run");
+    assert!(second.status.success());
+    assert!(second.stdout.is_empty());
+
+    let output = dicho()
+        .env("DICHO_DATA_DIR", &dir)
+        .args(["history", "--limit", "5"])
+        .output()
+        .expect("command should run");
+    let text = String::from_utf8_lossy(&output.stdout);
+    assert_eq!(text.lines().count(), 2);
+    assert!(text.contains("  save  refran-001"));
+    assert!(text.contains("  unsave  refran-001"));
     fs::remove_dir_all(&dir).ok();
 }
